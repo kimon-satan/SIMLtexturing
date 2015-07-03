@@ -5,8 +5,10 @@
 #include "cinder/gl/Vbo.h"
 #include "cinder/gl/Fbo.h"
 #include "cinder/gl/Texture.h"
+#include "cinder/Rand.h"
 #include "cinder/ImageIo.h"
 #include <algorithm>
+
 
 using namespace ci;
 using namespace ci::app;
@@ -29,19 +31,20 @@ class SimlTexturingApp : public AppBasic {
 	gl::VboMeshRef	mVboMesh;
 	gl::TextureRef	mTexture;
     
-    static const int	FBO_WIDTH = 1200, FBO_HEIGHT = 67;
-    
+    static const int	FBO_WIDTH = 128 * 6 * 2, FBO_HEIGHT = 72 * 2;
+    float mScreenWidthsMeters[NUM_SCREENS] = {6,5,5,6,5,5};
+    float mScreenWidths [NUM_SCREENS];
     void prepareSettings(Settings * settings);
     
     private:
-    
+
 
     
 
 };
 
 void SimlTexturingApp::prepareSettings(Settings * settings){
-    settings->setWindowSize(128 * 6, 72);
+    settings->setWindowSize(128 * 6 * 1.5, 72 * 1.5);
     settings->setFrameRate( 60.0f );
 }
 
@@ -75,13 +78,15 @@ void SimlTexturingApp::setup()
     vector<float> winYPoints(NUM_SCREENS * 4);
     vector<float> texYPoints(NUM_SCREENS * 4);
     
+    //screen widths in meters
+
     
-    float screenWidths [NUM_SCREENS] = {6, 5, 5, 6, 5, 5}; //enter the screen widths in meters here
+    
     float screenHeights [NUM_SCREENS];
     
     float smallestScr = 100;
-    for(int i = 0; i < NUM_SCREENS; i ++)smallestScr = std::min(screenWidths[i], smallestScr);
-    for(int i = 0; i < NUM_SCREENS; i ++)screenHeights[i] =  screenWidths[i]/smallestScr;
+    for(int i = 0; i < NUM_SCREENS; i ++)smallestScr = std::min(mScreenWidthsMeters[i], smallestScr);
+    for(int i = 0; i < NUM_SCREENS; i ++)screenHeights[i] =  mScreenWidthsMeters[i]/smallestScr;
     
     
     
@@ -89,8 +94,8 @@ void SimlTexturingApp::setup()
     
     //normalise the sum of the array
     float tot = 0;
-    for(int i = 0; i < NUM_SCREENS; i++)tot += screenWidths [i];
-    for(int i = 0; i < NUM_SCREENS; i++)screenWidths [i] *= NUM_SCREENS/tot;
+    for(int i = 0; i < NUM_SCREENS; i++)tot += mScreenWidthsMeters [i];
+    for(int i = 0; i < NUM_SCREENS; i++)mScreenWidths [i] = mScreenWidthsMeters[i] * (NUM_SCREENS/tot);
     
     float incr = 1.0/(float)NUM_SCREENS;
     
@@ -100,7 +105,7 @@ void SimlTexturingApp::setup()
         
         //texX points are scaled according to physical screen width ... if the screen is wider
         texXPoints[i] = runningX;
-        if(i%2 == 0)runningX += incr * screenWidths[i/2];
+        if(i%2 == 0)runningX += incr * mScreenWidths[i/2];
         
         
         //winX points are all evenly spaced ... each projector is the same width
@@ -172,21 +177,39 @@ void SimlTexturingApp::renderSceneToFbo()
     // set the modelview matrix to reflect our current rotation
     
     // clear out the FBO with blue
-    gl::clear( Color( 0.25, 0.5f, 1.0f ) );
+    gl::clear( Color( 0.5, 0.5f, 0.5f ) );
     
     // render an orange torus, with no textures
 
+
+    
+    Rand r;
+    float pos = 0;
+    
+    for(int  i= 0; i < NUM_SCREENS; i++){
+        gl::color( Color( r.nextFloat(), r.nextFloat(), r.nextFloat() ) );
+        Rectf rect( pos/6 * mFbo.getWidth(), 0,
+                   pos/6 * mFbo.getWidth() + mScreenWidths[i]/6 * mFbo.getWidth(), mFbo.getHeight());
+        gl::drawSolidRect( rect );
+        pos += mScreenWidths[i];
+        
+    }
+    
     gl::color( Color( 1.0f, 1.0f, 1.0f ) );
     
-    float incr = mFbo.getWidth() /(float) 20;
+    float incr = mFbo.getHeight() /2;
+    int numBs = ceil(mFbo.getWidth()/incr);
     
-    for(int i = 0; i < 20; i++){
+    for(int i = 0; i < numBs; i++){
         gl::drawLine(Vec2f( i * incr,0), Vec2f( (i + 1) * incr, mFbo.getHeight()/2));
         gl::drawLine(Vec2f( i * incr,mFbo.getHeight()/2), Vec2f( (i + 1) * incr, mFbo.getHeight()));
         gl::drawLine(Vec2f( i * incr,0), Vec2f(i * incr, mFbo.getHeight()));
+        gl::drawSolidCircle(Vec2f(i * incr,mFbo.getHeight()/2), 10);
     }
     
     gl::drawLine(Vec2f(0,mFbo.getHeight()/2), Vec2f(mFbo.getWidth(),mFbo.getHeight()/2));
+
+   
     
     mFbo.unbindFramebuffer();
   
