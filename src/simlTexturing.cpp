@@ -6,6 +6,7 @@
 #include "cinder/gl/Fbo.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/ImageIo.h"
+#include <algorithm>
 
 using namespace ci;
 using namespace ci::app;
@@ -77,6 +78,15 @@ void SimlTexturingApp::setup()
     
     float screenWidths [NUM_SCREENS] = {6, 5, 5, 6, 5, 5}; //enter the screen widths in meters here
     
+    /*float smallestScr = 100;
+    for(int i = 0; i < NUM_SCREENS; i ++)smallestScr = std::min(screenWidths[i], smallestScr);
+    for(int i = 0; i < NUM_SCREENS; i ++)screenWidths[i] /=  smallestScr;*/
+    
+    
+    
+    
+    //this method means that you lose some pixels from the bottom of the screen
+    
     //normalise the sum of the array
     float tot = 0;
     for(int i = 0; i < NUM_SCREENS; i++)tot += screenWidths [i];
@@ -105,7 +115,7 @@ void SimlTexturingApp::setup()
     for(int i = 0; i < NUM_SCREENS; i++)
     {
         for(int j = 0; j < 4; j++){
-            winYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0/screenWidths[i];
+            winYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0/screenWidths[i]; // we shorten the screen widths ... but at the moment we lose the bottom edge
             texYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0;
         }
 
