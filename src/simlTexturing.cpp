@@ -77,11 +77,11 @@ void SimlTexturingApp::setup()
     
     
     float screenWidths [NUM_SCREENS] = {6, 5, 5, 6, 5, 5}; //enter the screen widths in meters here
+    float screenHeights [NUM_SCREENS];
     
-    /*float smallestScr = 100;
+    float smallestScr = 100;
     for(int i = 0; i < NUM_SCREENS; i ++)smallestScr = std::min(screenWidths[i], smallestScr);
-    for(int i = 0; i < NUM_SCREENS; i ++)screenWidths[i] /=  smallestScr;*/
-    
+    for(int i = 0; i < NUM_SCREENS; i ++)screenHeights[i] =  screenWidths[i]/smallestScr;
     
     
     
@@ -115,7 +115,7 @@ void SimlTexturingApp::setup()
     for(int i = 0; i < NUM_SCREENS; i++)
     {
         for(int j = 0; j < 4; j++){
-            winYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0/screenWidths[i]; // we shorten the screen widths ... but at the moment we lose the bottom edge
+            winYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0/screenHeights[i]; // we shorten the screen heights for the larger screens
             texYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0;
         }
 
