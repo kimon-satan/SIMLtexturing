@@ -74,23 +74,42 @@ void SimlTexturingApp::setup()
     vector<float> winYPoints(NUM_SCREENS * 4);
     vector<float> texYPoints(NUM_SCREENS * 4);
     
+    
+    float screenWidths [NUM_SCREENS] = {6, 5, 5, 6, 5, 5}; //enter the screen widths in meters here
+    
+    //normalise the sum of the array
+    float tot = 0;
+    for(int i = 0; i < NUM_SCREENS; i++)tot += screenWidths [i];
+    for(int i = 0; i < NUM_SCREENS; i++)screenWidths [i] *= NUM_SCREENS/tot;
+    
     float incr = 1.0/(float)NUM_SCREENS;
-
-    for(int i = 0; i < winXPoints.size(); i++)
-    {
+    
+    float runningX = 0;
+    
+    for(int i = 0; i < texXPoints.size(); i++){
+        
+        //texX points are scaled according to physical screen width ... if the screen is wider
+        texXPoints[i] = runningX;
+        if(i%2 == 0)runningX += incr * screenWidths[i/2];
+        
+        
+        //winX points are all evenly spaced ... each projector is the same width
         if(i%2 == 0){
-          winXPoints[i] = (i/2) * incr;
-          texXPoints[i] = (i/2) * incr;
+            winXPoints[i] = (i/2) * incr;
         }else{
-          winXPoints[i] = ((i+1)/2) * incr;
-          texXPoints[i] = ((i+1)/2) * incr;
+            winXPoints[i] = ((i+1)/2) * incr;
         }
     }
+
     
-    for(int i = 0; i < winYPoints.size(); i++)
+    for(int i = 0; i < NUM_SCREENS; i++)
     {
-        winYPoints[i] = (i%2 == 0)? 0.0 : 1.0;
-        texYPoints[i] = (i%2 == 0)? 0.0 : 1.0;
+        for(int j = 0; j < 4; j++){
+            winYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0/screenWidths[i];
+            texYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0;
+        }
+
+        
     }
 
     vector<Vec3f> positions;
@@ -147,13 +166,17 @@ void SimlTexturingApp::renderSceneToFbo()
     
     // render an orange torus, with no textures
 
-    gl::color( Color( 1.0f, 0.0f, 0.0f ) );
+    gl::color( Color( 1.0f, 1.0f, 1.0f ) );
     
-    float incr = mFbo.getWidth() /(float) NUM_SCREENS;
+    float incr = mFbo.getWidth() /(float) 20;
     
-    for(int i = 0; i < NUM_SCREENS; i++){
-        gl::drawLine(Vec2f( i * incr,0), Vec2f( (i + 1) * incr, mFbo.getHeight()));
+    for(int i = 0; i < 20; i++){
+        gl::drawLine(Vec2f( i * incr,0), Vec2f( (i + 1) * incr, mFbo.getHeight()/2));
+        gl::drawLine(Vec2f( i * incr,mFbo.getHeight()/2), Vec2f( (i + 1) * incr, mFbo.getHeight()));
+        gl::drawLine(Vec2f( i * incr,0), Vec2f(i * incr, mFbo.getHeight()));
     }
+    
+    gl::drawLine(Vec2f(0,mFbo.getHeight()/2), Vec2f(mFbo.getWidth(),mFbo.getHeight()/2));
     
     mFbo.unbindFramebuffer();
   
