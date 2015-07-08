@@ -1,4 +1,4 @@
-#include "Resources.h"
+
 
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
@@ -7,6 +7,7 @@
 #include "cinder/gl/Texture.h"
 #include "cinder/Rand.h"
 #include "cinder/ImageIo.h"
+
 #include <algorithm>
 
 
@@ -22,6 +23,8 @@ class SimlTexturingApp : public AppBasic {
 	void setup();
 	void update();
 	void draw();
+	void keyDown(KeyEvent 	event);
+
     void renderSceneToFbo();
 
     static const int NUM_SCREENS = 6;
@@ -29,27 +32,38 @@ class SimlTexturingApp : public AppBasic {
 
     gl::Fbo mFbo;
 	gl::VboMeshRef	mVboMesh;
-	gl::TextureRef	mTexture;
+	gl::Texture	 mTexture;
     
-    static const int	FBO_WIDTH = 128 * 6 * 2, FBO_HEIGHT = 72 * 2;
-    float mScreenWidthsMeters[NUM_SCREENS] = {6,5,5,6,5,5};
+    static const int	FBO_WIDTH = 128 * 6 * (1.0f + 1/15.0f) * 10, FBO_HEIGHT = 72 * 10;
+	float mScreenWidthsMeters[NUM_SCREENS]; 
     float mScreenWidths [NUM_SCREENS];
     void prepareSettings(Settings * settings);
     
     private:
 
-
+	int mXpos;
     
 
 };
 
 void SimlTexturingApp::prepareSettings(Settings * settings){
-    settings->setWindowSize(128 * 6 * 1.5, 72 * 1.5);
+    settings->setWindowSize(1280 * 6, 720);
     settings->setFrameRate( 60.0f );
+	settings->setBorderless(true);
+	settings->setWindowPos(1280, 0);
 }
 
 void SimlTexturingApp::setup()
 {
+
+	mXpos = 0;
+
+	float screenWidths[] = { 6, 4.55, 4.55, 6, 4.55, 4.55 };
+
+	for (int i = 0; i < NUM_SCREENS; i++)
+	{
+		mScreenWidthsMeters[i] = screenWidths[i];
+	}
 
 
     gl::Fbo::Format format;
@@ -154,9 +168,9 @@ void SimlTexturingApp::setup()
     mVboMesh->bufferPositions(positions);
     mVboMesh->unbindBuffers();
     
-	mTexture = gl::Texture::create( loadImage( loadResource( RES_IMAGE ) ) );
-    
-    renderSceneToFbo();
+	//mTexture = gl::Texture::create( loadImage( loadResource( RES_IMAGE ) ) );
+   
+
 
 }
 
@@ -179,8 +193,6 @@ void SimlTexturingApp::renderSceneToFbo()
     // clear out the FBO with blue
     gl::clear( Color( 0.5, 0.5f, 0.5f ) );
     
-    // render an orange torus, with no textures
-
 
     
     Rand r;
@@ -209,18 +221,43 @@ void SimlTexturingApp::renderSceneToFbo()
     
     gl::drawLine(Vec2f(0,mFbo.getHeight()/2), Vec2f(mFbo.getWidth(),mFbo.getHeight()/2));
 
-   
-    
+	if (mTexture){
+		gl::pushMatrices();
+		gl::translate(mXpos + mTexture.getWidth() / 2, mTexture.getHeight() / 2);
+		//gl::scale(1, -1,1);
+		gl::rotate(180);
+		gl::draw(mTexture, Vec2f( - mTexture.getWidth()/2, - mTexture.getHeight()/2));
+		mXpos += 1;
+		mXpos = mXpos%mFbo.getWidth();
+		gl::popMatrices();
+	}
     mFbo.unbindFramebuffer();
   
+}
+
+
+void SimlTexturingApp::keyDown(KeyEvent event){
+
+	if (event.getChar() == 'o') {
+
+		try {
+			fs::path path = getOpenFilePath("", ImageIo::getLoadExtensions());
+			if (!path.empty()) {
+				mTexture = gl::Texture(loadImage(path));
+			}
+		}
+		catch (...) {
+			console() << "unable to load the texture file!" << std::endl;
+		}
+
+	}
 }
 
 
 void SimlTexturingApp::update()
 {
 
-
-
+	renderSceneToFbo();
 }
 
 void SimlTexturingApp::draw()
