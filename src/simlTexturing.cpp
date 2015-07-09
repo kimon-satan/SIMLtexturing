@@ -7,16 +7,15 @@ void SimlTexturingApp::prepareSettings(Settings * settings){
     settings->setWindowSize(mcWindowWidth, mcWindowHeight);
     settings->setFrameRate( 60.0f );
     settings->setBorderless();
+	settings->setWindowPos(1280, 0);
+
 }
 
 void SimlTexturingApp::setup()
 {
 
-    mProp = 6.0/5.0;
-
-    
-    
-
+	mProp = 1.28;
+	mTargetTime = 1.0;
     
     mVerticesX = NUM_SCREENS * 2;
     mVerticesY = 2;
@@ -29,9 +28,6 @@ void SimlTexturingApp::setup()
 }
 
 void SimlTexturingApp::resizeScreens(){
-
-
-    
  
     
     if(mVboMesh)mVboMesh->reset();
@@ -130,8 +126,8 @@ void SimlTexturingApp::resizeScreens(){
 
     float fboProp = ((1 - 1/mProp) * 2)/tot + 1;
     
-    mFboWidth = 128 * 6 * fboProp;
-    mFboHeight = 72;
+    mFboWidth = 128 * 6 * 10 *  fboProp;
+    mFboHeight = 720;
     
     //this will need to be reset too
     gl::Fbo::Format format;
@@ -164,37 +160,18 @@ void SimlTexturingApp::renderSceneToFbo()
     // set the modelview matrix to reflect our current rotation
     
     // clear out the FBO with blue
-    gl::clear( Color( 0.5, 0.5f, 0.5f ) );
+    gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
     
-    // render an orange torus, with no textures
 
+	if (mIsTestImage)
+	{
+		renderTestImage();
+	}
+	else{
 
+	}
     
-    Rand r;
-    float pos = 0;
-    
-    for(int  i= 0; i < NUM_SCREENS; i++){
-        gl::color( Color( r.nextFloat(), r.nextFloat(), r.nextFloat() ) );
-        Rectf rect( pos/6 * mFbo.getWidth(), 0,
-                   pos/6 * mFbo.getWidth() + mNormalizedProps[i]/6 * mFbo.getWidth(), mFbo.getHeight());
-        gl::drawSolidRect( rect );
-        pos += mNormalizedProps[i];
-        
-    }
-    
-    gl::color( Color( 1.0f, 1.0f, 1.0f ) );
-    
-    float incr = mFbo.getHeight() /2;
-    int numBs = ceil(mFbo.getWidth()/incr);
-    
-    for(int i = 0; i < numBs; i++){
-        gl::drawLine(Vec2f( i * incr,0), Vec2f( (i + 1) * incr, mFbo.getHeight()/2));
-        gl::drawLine(Vec2f( i * incr,mFbo.getHeight()/2), Vec2f( (i + 1) * incr, mFbo.getHeight()));
-        gl::drawLine(Vec2f( i * incr,0), Vec2f(i * incr, mFbo.getHeight()));
-        gl::drawSolidCircle(Vec2f(i * incr,mFbo.getHeight()/2), 10);
-    }
-    
-    gl::drawLine(Vec2f(0,mFbo.getHeight()/2), Vec2f(mFbo.getWidth(),mFbo.getHeight()/2));
+   
 
    
     
@@ -203,10 +180,41 @@ void SimlTexturingApp::renderSceneToFbo()
 }
 
 
+void SimlTexturingApp::renderTestImage(){
+	Rand r;
+	float pos = 0;
+
+	for (int i = 0; i < NUM_SCREENS; i++){
+		gl::color(Color(r.nextFloat(), r.nextFloat(), r.nextFloat()));
+		Rectf rect(pos / 6 * mFbo.getWidth(), 0,
+			pos / 6 * mFbo.getWidth() + mNormalizedProps[i] / 6 * mFbo.getWidth(), mFbo.getHeight());
+		gl::drawSolidRect(rect);
+		pos += mNormalizedProps[i];
+
+	}
+
+	gl::color(Color(1.0f, 1.0f, 1.0f));
+
+	float incr = mFbo.getHeight() / 2;
+	int numBs = ceil(mFbo.getWidth() / incr);
+
+	for (int i = 0; i < numBs; i++){
+		gl::drawLine(Vec2f(i * incr, 0), Vec2f((i + 1) * incr, mFbo.getHeight() / 2));
+		gl::drawLine(Vec2f(i * incr, mFbo.getHeight() / 2), Vec2f((i + 1) * incr, mFbo.getHeight()));
+		gl::drawLine(Vec2f(i * incr, 0), Vec2f(i * incr, mFbo.getHeight()));
+		gl::drawSolidCircle(Vec2f(i * incr, mFbo.getHeight() / 2), 10);
+	}
+
+	gl::drawLine(Vec2f(0, mFbo.getHeight() / 2), Vec2f(mFbo.getWidth(), mFbo.getHeight() / 2));
+}
+
 void SimlTexturingApp::update()
 {
-
-
+	if (app::getElapsedSeconds() >= mTargetTime){
+		//console() << app::getElapsedFrames() << std::endl;
+		mTargetTime += 1;
+	}
+	renderSceneToFbo();
 
 }
 
@@ -239,20 +247,27 @@ void SimlTexturingApp::draw()
 
 
 void SimlTexturingApp::keyDown(KeyEvent key){
-    
+
     if(key.getCode() == KeyEvent::KEY_UP)
     {
-        mProp += 0.01;
+        mProp += 0.005;
         resizeScreens();
         renderSceneToFbo();
     }
     
     if(key.getCode() == KeyEvent::KEY_DOWN)
     {
-        mProp -= 0.01;
+        mProp -= 0.005;
         resizeScreens();
         renderSceneToFbo();
     }
+
+	if (key.getCode() == KeyEvent::KEY_SPACE)
+	{
+		mIsTestImage = !mIsTestImage;
+	}
+
+	
     
     
     

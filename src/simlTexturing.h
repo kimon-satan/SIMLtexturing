@@ -9,8 +9,6 @@
 #ifndef simlTexturing_simlTexturing_h
 #define simlTexturing_simlTexturing_h
 
-#include "Resources.h"
-
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Vbo.h"
@@ -33,6 +31,8 @@ public:
     void draw();
     void resizeScreens();
     void renderSceneToFbo();
+
+	void renderTestImage();
     
     static const int NUM_SCREENS = 6;
     int mVerticesX, mVerticesY;
@@ -41,11 +41,14 @@ public:
     gl::VboMeshRef	mVboMesh;
     gl::TextureRef	mTexture;
     
-    static const int mcWindowWidth = 128 * 6 * 1.5;
-    static const int mcWindowHeight =  72 * 1.5;
+    static const int mcWindowWidth = 128 * 6 * 10;
+    static const int mcWindowHeight =  720;
     int	mFboWidth, mFboHeight;
     
+	bool mIsTestImage;
+
     float mProp; // endScreen/sideScreen
+	float mTargetTime;
     float mNormalizedProps[NUM_SCREENS];
     float mScreenWidths [NUM_SCREENS];
     void prepareSettings(Settings * settings);
