@@ -1,91 +1,52 @@
 
+#include "simlTexturing.h"
 
-#include "cinder/app/AppBasic.h"
-#include "cinder/gl/gl.h"
-#include "cinder/gl/Vbo.h"
-#include "cinder/gl/Fbo.h"
-#include "cinder/gl/Texture.h"
-#include "cinder/Rand.h"
-#include "cinder/ImageIo.h"
-
-#include <algorithm>
-
-
-using namespace ci;
-using namespace ci::app;
-
-using std::vector;
-
-
-class SimlTexturingApp : public AppBasic {
-    
- public:
-	void setup();
-	void update();
-	void draw();
-	void keyDown(KeyEvent 	event);
-
-    void renderSceneToFbo();
-
-    static const int NUM_SCREENS = 6;
-	int mVerticesX, mVerticesY;
-
-    gl::Fbo mFbo;
-	gl::VboMeshRef	mVboMesh;
-	gl::Texture	 mTexture;
-    
-    static const int	FBO_WIDTH = 128 * 6 * (1.0f + 1/15.0f) * 10, FBO_HEIGHT = 72 * 10;
-	float mScreenWidthsMeters[NUM_SCREENS]; 
-    float mScreenWidths [NUM_SCREENS];
-    void prepareSettings(Settings * settings);
-    
-    private:
-
-	int mXpos;
-    
-
-};
 
 void SimlTexturingApp::prepareSettings(Settings * settings){
-    settings->setWindowSize(1280 * 6, 720);
+    
+    settings->setWindowSize(mcWindowWidth, mcWindowHeight);
     settings->setFrameRate( 60.0f );
-	settings->setBorderless(true);
-	settings->setWindowPos(1280, 0);
+    settings->setBorderless();
 }
 
 void SimlTexturingApp::setup()
 {
 
-	mXpos = 0;
+    mProp = 6.0/5.0;
 
-	float screenWidths[] = { 6, 4.55, 4.55, 6, 4.55, 4.55 };
+    
+    
 
-	for (int i = 0; i < NUM_SCREENS; i++)
-	{
-		mScreenWidthsMeters[i] = screenWidths[i];
-	}
-
-
-    gl::Fbo::Format format;
-    //format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
-    mFbo = gl::Fbo( FBO_WIDTH, FBO_HEIGHT, format );
     
     mVerticesX = NUM_SCREENS * 2;
     mVerticesY = 2;
-	// setup the parameters of the Vbo
-	int totalVertices = mVerticesX * mVerticesY;
-	int totalQuads = ( mVerticesX - 1 ) * ( mVerticesY - 1 );
-	gl::VboMesh::Layout layout;
-	layout.setStaticIndices();
-	layout.setStaticPositions();
-	layout.setStaticTexCoords2d();
-	mVboMesh = gl::VboMesh::create( totalVertices, totalQuads * 4, layout, GL_QUADS );
 
 
+    resizeScreens();
+    renderSceneToFbo();
 	
-	// buffer our static data - the texcoords and the indices
-	vector<uint32_t> indices;
-	vector<Vec2f> texCoords;
+
+}
+
+void SimlTexturingApp::resizeScreens(){
+
+
+    
+ 
+    
+    if(mVboMesh)mVboMesh->reset();
+    
+    // setup the parameters of the Vbo
+    int totalVertices = mVerticesX * mVerticesY;
+    int totalQuads = ( mVerticesX - 1 ) * ( mVerticesY - 1 );
+    gl::VboMesh::Layout layout;
+    layout.setStaticIndices();
+    layout.setStaticPositions();
+    layout.setStaticTexCoords2d();
+    mVboMesh = gl::VboMesh::create( totalVertices, totalQuads * 4, layout, GL_QUADS );
+    
+    vector<uint32_t> indices;
+    vector<Vec2f> texCoords;
     
     vector<float> winXPoints(NUM_SCREENS * 2);
     vector<float> texXPoints(NUM_SCREENS * 2);
@@ -93,14 +54,12 @@ void SimlTexturingApp::setup()
     vector<float> texYPoints(NUM_SCREENS * 4);
     
     //screen widths in meters
-
     
     
+    float screenProps [NUM_SCREENS] = {mProp, 1.0, 1.0, mProp, 1.0, 1.0};
     float screenHeights [NUM_SCREENS];
     
-    float smallestScr = 100;
-    for(int i = 0; i < NUM_SCREENS; i ++)smallestScr = std::min(mScreenWidthsMeters[i], smallestScr);
-    for(int i = 0; i < NUM_SCREENS; i ++)screenHeights[i] =  mScreenWidthsMeters[i]/smallestScr;
+    for(int i = 0; i < NUM_SCREENS; i ++)screenHeights[i] =  1.0/screenProps[i];
     
     
     
@@ -108,8 +67,8 @@ void SimlTexturingApp::setup()
     
     //normalise the sum of the array
     float tot = 0;
-    for(int i = 0; i < NUM_SCREENS; i++)tot += mScreenWidthsMeters [i];
-    for(int i = 0; i < NUM_SCREENS; i++)mScreenWidths [i] = mScreenWidthsMeters[i] * (NUM_SCREENS/tot);
+    for(int i = 0; i < NUM_SCREENS; i++)tot += screenProps[i];
+    for(int i = 0; i < NUM_SCREENS; i++)mNormalizedProps [i] = screenProps[i] * (NUM_SCREENS/tot);
     
     float incr = 1.0/(float)NUM_SCREENS;
     
@@ -119,7 +78,7 @@ void SimlTexturingApp::setup()
         
         //texX points are scaled according to physical screen width ... if the screen is wider
         texXPoints[i] = runningX;
-        if(i%2 == 0)runningX += incr * mScreenWidths[i/2];
+        if(i%2 == 0)runningX += incr * mNormalizedProps[i/2];
         
         
         //winX points are all evenly spaced ... each projector is the same width
@@ -129,49 +88,63 @@ void SimlTexturingApp::setup()
             winXPoints[i] = ((i+1)/2) * incr;
         }
     }
-
+    
     
     for(int i = 0; i < NUM_SCREENS; i++)
     {
         for(int j = 0; j < 4; j++){
-            winYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0/screenHeights[i]; // we shorten the screen heights for the larger screens
+            winYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : screenHeights[i]; // we shorten the screen heights for the larger screens
             texYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0;
         }
-
+        
         
     }
-
+    
     vector<Vec3f> positions;
     positions.resize(totalVertices);
     
-	for( int x = 0; x < mVerticesX; ++x ) {
-		for( int y = 0; y < mVerticesY; ++y ) {
-			// create a quad for each vertex, except for along the bottom and right edges
-			if( ( x + 1 < mVerticesX ) && ( y + 1 < mVerticesY ) ) {
+    for( int x = 0; x < mVerticesX; ++x ) {
+        for( int y = 0; y < mVerticesY; ++y ) {
+            // create a quad for each vertex, except for along the bottom and right edges
+            if( ( x + 1 < mVerticesX ) && ( y + 1 < mVerticesY ) ) {
                 
-				indices.push_back( (x+0) * mVerticesY + (y+0) );
-				indices.push_back( (x+1) * mVerticesY + (y+0) );
-				indices.push_back( (x+1) * mVerticesY + (y+1) );
-				indices.push_back( (x+0) * mVerticesY + (y+1) );
-			}
-			// the texture coordinates are mapped to [0,1.0)
-			texCoords.push_back(Vec2f(texXPoints[x], texYPoints[y]));
+                indices.push_back( (x+0) * mVerticesY + (y+0) );
+                indices.push_back( (x+1) * mVerticesY + (y+0) );
+                indices.push_back( (x+1) * mVerticesY + (y+1) );
+                indices.push_back( (x+0) * mVerticesY + (y+1) );
+            }
+            // the texture coordinates are mapped to [0,1.0)
+            texCoords.push_back(Vec2f(texXPoints[x], texYPoints[y]));
             Vec3f p(  winXPoints[x],  winYPoints[y + x * 2], 0 );
             positions[x * mVerticesY + y] = p;
-		}
-	}
-	
-
+        }
+    }
     
-	mVboMesh->bufferIndices( indices );
-	mVboMesh->bufferTexCoords2d( 0, texCoords );
+    
+    
+    mVboMesh->bufferIndices( indices );
+    mVboMesh->bufferTexCoords2d( 0, texCoords );
     mVboMesh->bufferPositions(positions);
     mVboMesh->unbindBuffers();
     
-	//mTexture = gl::Texture::create( loadImage( loadResource( RES_IMAGE ) ) );
-   
 
+    float fboProp = ((1 - 1/mProp) * 2)/tot + 1;
+    
+    mFboWidth = 128 * 6 * fboProp;
+    mFboHeight = 72;
+    
+    //this will need to be reset too
+    gl::Fbo::Format format;
+    //format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
+    if(mFbo){
+        mFbo.unbindTexture();
+        mFbo.reset();
 
+    }
+    
+    mFbo = gl::Fbo( mFboWidth, mFboHeight, format );
+    
+    
 }
 
 void SimlTexturingApp::renderSceneToFbo()
@@ -193,6 +166,8 @@ void SimlTexturingApp::renderSceneToFbo()
     // clear out the FBO with blue
     gl::clear( Color( 0.5, 0.5f, 0.5f ) );
     
+    // render an orange torus, with no textures
+
 
     
     Rand r;
@@ -201,9 +176,9 @@ void SimlTexturingApp::renderSceneToFbo()
     for(int  i= 0; i < NUM_SCREENS; i++){
         gl::color( Color( r.nextFloat(), r.nextFloat(), r.nextFloat() ) );
         Rectf rect( pos/6 * mFbo.getWidth(), 0,
-                   pos/6 * mFbo.getWidth() + mScreenWidths[i]/6 * mFbo.getWidth(), mFbo.getHeight());
+                   pos/6 * mFbo.getWidth() + mNormalizedProps[i]/6 * mFbo.getWidth(), mFbo.getHeight());
         gl::drawSolidRect( rect );
-        pos += mScreenWidths[i];
+        pos += mNormalizedProps[i];
         
     }
     
@@ -221,44 +196,20 @@ void SimlTexturingApp::renderSceneToFbo()
     
     gl::drawLine(Vec2f(0,mFbo.getHeight()/2), Vec2f(mFbo.getWidth(),mFbo.getHeight()/2));
 
-	if (mTexture){
-		gl::pushMatrices();
-		gl::translate(mXpos + mTexture.getWidth() / 2, mTexture.getHeight() / 2);
-		//gl::scale(1, -1,1);
-		gl::rotate(180);
-		gl::draw(mTexture, Vec2f( - mTexture.getWidth()/2, - mTexture.getHeight()/2));
-		//mXpos += 1;
-		mXpos = mXpos%mFbo.getWidth();
-		gl::popMatrices();
-	}
+   
+    
     mFbo.unbindFramebuffer();
   
-}
-
-
-void SimlTexturingApp::keyDown(KeyEvent event){
-
-	if (event.getChar() == 'o') {
-
-		try {
-			fs::path path = getOpenFilePath("", ImageIo::getLoadExtensions());
-			if (!path.empty()) {
-				mTexture = gl::Texture(loadImage(path));
-			}
-		}
-		catch (...) {
-			console() << "unable to load the texture file!" << std::endl;
-		}
-
-	}
 }
 
 
 void SimlTexturingApp::update()
 {
 
-	renderSceneToFbo();
+
+
 }
+
 
 void SimlTexturingApp::draw()
 {
@@ -274,6 +225,8 @@ void SimlTexturingApp::draw()
     glScalef(getWindowWidth(), getWindowHeight(), 1.0);
 
     mFbo.getTexture().enableAndBind();
+    //gl::draw(  Rectf( 0, 0, 128 * 6, 72 ) );
+    //gl::draw(mFbo.getTexture());
     gl::draw( mVboMesh );
     mFbo.getTexture().unbind();
     gl::popMatrices();
@@ -282,6 +235,27 @@ void SimlTexturingApp::draw()
     
 
 
+}
+
+
+void SimlTexturingApp::keyDown(KeyEvent key){
+    
+    if(key.getCode() == KeyEvent::KEY_UP)
+    {
+        mProp += 0.01;
+        resizeScreens();
+        renderSceneToFbo();
+    }
+    
+    if(key.getCode() == KeyEvent::KEY_DOWN)
+    {
+        mProp -= 0.01;
+        resizeScreens();
+        renderSceneToFbo();
+    }
+    
+    
+    
 }
 
 
