@@ -9,9 +9,11 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{7f92008b-bc82-49bc-98a7-023cbcbfb923}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{910260c8-ebe8-46e5-a61f-90b3d41d7a01}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -20,11 +22,30 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Resources.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\simlTexturing.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\resources\seaFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\resources\passThruVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\resources\mountainFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

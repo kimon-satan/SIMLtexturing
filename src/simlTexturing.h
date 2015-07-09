@@ -16,7 +16,11 @@
 #include "cinder/gl/Texture.h"
 #include "cinder/Rand.h"
 #include "cinder/ImageIo.h"
+#include "cinder/gl/GlslProg.h"
 #include <algorithm>
+
+#include "../include/Resources.h"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -33,17 +37,21 @@ public:
     void renderSceneToFbo();
 
 	void renderTestImage();
+	void renderShaderImage();
     
     static const int NUM_SCREENS = 6;
     int mVerticesX, mVerticesY;
     
     gl::Fbo mFbo;
     gl::VboMeshRef	mVboMesh;
-    gl::TextureRef	mTexture;
-    
+
+	vector<gl::GlslProg>	mShaderProg;
+
+
     static const int mcWindowWidth = 128 * 6 * 10;
     static const int mcWindowHeight =  720;
     int	mFboWidth, mFboHeight;
+	int mCurrentShader;
     
 	bool mIsTestImage;
 

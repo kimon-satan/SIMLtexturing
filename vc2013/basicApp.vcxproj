@@ -25,6 +25,15 @@
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\src\simlTexturing.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\frag.glsl" />
+    <None Include="..\resources\mountainFrag.glsl" />
+    <None Include="..\resources\passThruVert.glsl" />
+    <None Include="..\resources\seaFrag.glsl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{74202EDD-91D2-4D2A-B0B6-355CEB16E6BE}</ProjectGuid>
     <RootNamespace>basicApp</RootNamespace>

@@ -16,6 +16,7 @@ void SimlTexturingApp::setup()
 
 	mProp = 1.28;
 	mTargetTime = 1.0;
+	mCurrentShader = 0;
     
     mVerticesX = NUM_SCREENS * 2;
     mVerticesY = 2;
@@ -23,6 +24,13 @@ void SimlTexturingApp::setup()
 
     resizeScreens();
     renderSceneToFbo();
+
+	mShaderProg.resize(3);
+		
+	mShaderProg[0] = gl::GlslProg(loadResource(RES_PT_VERT_GLSL, "GLSL"), loadResource(RES_SEA_FRAG_GLSL, "GLSL"));
+	mShaderProg[1] = gl::GlslProg(loadResource(RES_PT_VERT_GLSL, "GLSL"), loadResource(RES_MOUNTAIN_FRAG_GLSL, "GLSL"));
+	mShaderProg[2] = gl::GlslProg(loadResource(RES_PT_VERT_GLSL, "GLSL"), loadResource(RES_FRAG_GLSL, "GLSL"));
+
 	
 
 }
@@ -168,7 +176,7 @@ void SimlTexturingApp::renderSceneToFbo()
 		renderTestImage();
 	}
 	else{
-
+		renderShaderImage();
 	}
     
    
@@ -206,6 +214,18 @@ void SimlTexturingApp::renderTestImage(){
 	}
 
 	gl::drawLine(Vec2f(0, mFbo.getHeight() / 2), Vec2f(mFbo.getWidth(), mFbo.getHeight() / 2));
+}
+
+void SimlTexturingApp::renderShaderImage(){
+
+	mShaderProg[mCurrentShader ].bind();
+	Vec2f res = Vec2f(mFboWidth, mFboHeight);
+	mShaderProg[mCurrentShader].uniform("iResolution", res);
+	mShaderProg[mCurrentShader].uniform("iGlobalTime", (float)app::getElapsedSeconds());
+	mShaderProg[mCurrentShader].uniform("iMouse", Vec2f(0., 0));
+	gl::drawSolidRect(mFbo.getBounds());
+	mShaderProg[mCurrentShader].unbind();
+
 }
 
 void SimlTexturingApp::update()
@@ -261,6 +281,10 @@ void SimlTexturingApp::keyDown(KeyEvent key){
         resizeScreens();
         renderSceneToFbo();
     }
+
+	if (key.getCode() == KeyEvent::KEY_LEFT){
+		mCurrentShader = (mCurrentShader + 1)%mShaderProg.size();
+	}
 
 	if (key.getCode() == KeyEvent::KEY_SPACE)
 	{
