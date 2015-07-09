@@ -227,7 +227,7 @@ void SimlTexturingApp::renderSceneToFbo()
 		//gl::scale(1, -1,1);
 		gl::rotate(180);
 		gl::draw(mTexture, Vec2f( - mTexture.getWidth()/2, - mTexture.getHeight()/2));
-		mXpos += 1;
+		//mXpos += 1;
 		mXpos = mXpos%mFbo.getWidth();
 		gl::popMatrices();
 	}
