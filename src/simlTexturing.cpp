@@ -14,6 +14,7 @@ void SimlTexturingApp::prepareSettings(Settings * settings){
 void SimlTexturingApp::setup()
 {
 
+	mLastFrameCount = 0;
 	mProp = 1.28;
 	mTargetTime = 1.0;
 	mCurrentShader = 0;
@@ -21,7 +22,7 @@ void SimlTexturingApp::setup()
     mVerticesX = NUM_SCREENS * 2;
     mVerticesY = 2;
 
-
+	mRenderMode = 0;
     resizeScreens();
     renderSceneToFbo();
 
@@ -171,12 +172,15 @@ void SimlTexturingApp::renderSceneToFbo()
     gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
     
 
-	if (mIsTestImage)
+	if (mRenderMode == 0)
 	{
 		renderTestImage();
 	}
-	else{
+	else if(mRenderMode == 1){
 		renderShaderImage();
+	}
+	else if (mRenderMode == 2){
+		renderMovie();
 	}
     
    
@@ -216,6 +220,19 @@ void SimlTexturingApp::renderTestImage(){
 	gl::drawLine(Vec2f(0, mFbo.getHeight() / 2), Vec2f(mFbo.getWidth(), mFbo.getHeight() / 2));
 }
 
+void SimlTexturingApp::renderMovie(){
+
+	gl::clear(Color(255, 255, 255));
+	//gl::enableAlphaBlending();
+
+	if (mMovie) {
+		Rectf centeredRect = Rectf(mMovie->getTexture().getBounds()).getCenteredFit(mFbo.getBounds(), true);
+		gl::draw(mMovie->getTexture(), centeredRect);
+	}
+	
+
+}
+
 void SimlTexturingApp::renderShaderImage(){
 
 	mShaderProg[mCurrentShader ].bind();
@@ -231,7 +248,9 @@ void SimlTexturingApp::renderShaderImage(){
 void SimlTexturingApp::update()
 {
 	if (app::getElapsedSeconds() >= mTargetTime){
-		//console() << app::getElapsedFrames() << std::endl;
+		int fps = app::getElapsedFrames() - mLastFrameCount;
+		console() <<  fps << std::endl;
+		mLastFrameCount = app::getElapsedFrames();
 		mTargetTime += 1;
 	}
 	renderSceneToFbo();
@@ -285,17 +304,44 @@ void SimlTexturingApp::keyDown(KeyEvent key){
 	if (key.getCode() == KeyEvent::KEY_LEFT){
 		mCurrentShader = (mCurrentShader + 1)%mShaderProg.size();
 	}
-
+	 
 	if (key.getCode() == KeyEvent::KEY_SPACE)
 	{
-		mIsTestImage = !mIsTestImage;
+		mRenderMode = (mRenderMode + 1) % 3;
 	}
 
+	if (key.getCode() == KeyEvent::KEY_o){
+		fs::path moviePath = getOpenFilePath();
+		if (!moviePath.empty())
+			loadMovieFile(moviePath);
+	}   
+
+	if (key.getCode() == KeyEvent::KEY_ESCAPE){
+		quit();
+	}
 	
     
     
     
 }
+void SimlTexturingApp::loadMovieFile(const fs::path &moviePath)
+{
+	try {
+		// load up the movie, set it to loop, and begin playing
+		mMovie = qtime::MovieGl::create(moviePath);
+		mMovie->setLoop();
+		mMovie->play();
+
+		
+	}
+	catch (...) {
+		console() << "Unable to load the movie." << std::endl;
+		mMovie->reset();
+		
+	}
+
+}
+
 
 
 CINDER_APP_BASIC( SimlTexturingApp, RendererGl )

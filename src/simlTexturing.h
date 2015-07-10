@@ -17,6 +17,7 @@
 #include "cinder/Rand.h"
 #include "cinder/ImageIo.h"
 #include "cinder/gl/GlslProg.h"
+#include "cinder/qtime/QuickTime.h"
 #include <algorithm>
 
 #include "../include/Resources.h"
@@ -35,23 +36,27 @@ public:
     void draw();
     void resizeScreens();
     void renderSceneToFbo();
+	void renderMovie();
+	void loadMovieFile(const fs::path &moviePath);
 
 	void renderTestImage();
 	void renderShaderImage();
     
     static const int NUM_SCREENS = 6;
     int mVerticesX, mVerticesY;
+	int mLastFrameCount;
     
     gl::Fbo mFbo;
     gl::VboMeshRef	mVboMesh;
 
 	vector<gl::GlslProg>	mShaderProg;
+	qtime::MovieGlRef		mMovie;
 
 
     static const int mcWindowWidth = 128 * 6 * 10;
     static const int mcWindowHeight =  720;
     int	mFboWidth, mFboHeight;
-	int mCurrentShader;
+	int mCurrentShader, mRenderMode;
     
 	bool mIsTestImage;
 
