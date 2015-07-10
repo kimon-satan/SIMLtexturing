@@ -18,6 +18,7 @@
 #include "cinder/ImageIo.h"
 #include "cinder/gl/GlslProg.h"
 #include "cinder/qtime/QuickTime.h"
+#include "Spout.h"
 #include <algorithm>
 
 #include "../include/Resources.h"
@@ -37,8 +38,9 @@ public:
     void resizeScreens();
     void renderSceneToFbo();
 	void renderMovie();
+	void renderSpout();
 	void loadMovieFile(const fs::path &moviePath);
-
+	void mouseDown(MouseEvent event);
 	void renderTestImage();
 	void renderShaderImage();
     
@@ -67,6 +69,18 @@ public:
     void prepareSettings(Settings * settings);
     
     void keyDown(KeyEvent key);
+	void shutdown();
+
+
+	SpoutReceiver spoutreceiver;				// Create a Spout receiver object
+	gl::Texture spoutTexture;					// Local Cinder texture used for sharing
+
+	bool bInitialized;							// true if a sender initializes OK
+	bool bDoneOnce;								// only try to initialize once
+	bool bMemoryMode;							// tells us if texture share compatible
+	unsigned int g_Width, g_Height;				// size of the texture being sent out
+	char SenderName[256];						// sender name 
+
     
 private:
     
