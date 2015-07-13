@@ -1,7 +1,0 @@
-#pragma once
-#include "..\include\Resources.h"
-
-RES_PT_VERT_GLSL	GLSL	"..\\resources\\passThruVert.glsl"
-RES_SEA_FRAG_GLSL	GLSL	"..\\resources\\seafrag.glsl"
-RES_MOUNTAIN_FRAG_GLSL	GLSL	"..\\resources\\MountainFrag.glsl"
-RES_FRAG_GLSL	GLSL	"..\\resources\\frag.glsl"
