@@ -1,4 +1,6 @@
 #pragma once
-#include "cinder/CinderResources.h"
 
-#define RES_IMAGE		CINDER_RESOURCE( ../data/, cinder_logo.png, 130, JPG )
+#define RES_PT_VERT_GLSL	128
+#define RES_SEA_FRAG_GLSL	129
+#define RES_MOUNTAIN_FRAG_GLSL	130
+#define RES_FRAG_GLSL	131
