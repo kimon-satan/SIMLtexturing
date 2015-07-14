@@ -2,23 +2,18 @@
 #include "simlTexturing.h"
 
 
-void SimlTexturingApp::prepareSettings(Settings * settings){
-    
-    settings->setWindowSize(mcWindowWidth, mcWindowHeight);
-    settings->setFrameRate( 60.0f );
-    settings->setBorderless();
-
-	settings->setWindowPos(1280, 0);
-
-	g_Width = mcWindowHeight; // set global width and height to something
-	g_Height = mcWindowHeight;
-
-}
 
 void SimlTexturingApp::setup()
 {
 
+	setWindowSize(mcWindowWidth, mcWindowHeight);
+	setFrameRate(60.0f);
+	getWindow()->setBorderless();
 
+	setWindowPos(1280, 0);
+
+	g_Width = mcWindowHeight; // set global width and height to something
+	g_Height = mcWindowHeight;
 	mLastFrameCount = 0;
 	mProp = 1.28;
 	mTargetTime = 1.0;
@@ -29,16 +24,33 @@ void SimlTexturingApp::setup()
     mVerticesY = 2;
 
 	mRenderMode = 0;
-    resizeScreens();
-    renderSceneToFbo();
 
+
+	auto plane = geom::Plane().subdivisions(ivec2(mVerticesX - 1, mVerticesY - 1));
+
+	vector<gl::VboMesh::Layout> bufferLayout = {
+		gl::VboMesh::Layout().usage(GL_DYNAMIC_DRAW).attrib(geom::Attrib::POSITION, 3),
+		gl::VboMesh::Layout().usage(GL_DYNAMIC_DRAW).attrib(geom::Attrib::TEX_COORD_0, 2)
+	};
+
+
+	mVboMesh = gl::VboMesh::create(plane, bufferLayout);
+
+	
+
+	resizeScreens();
+	renderSceneToFbo();
 
 	mShaderProg.resize(3);
-		
-	mShaderProg[0] = gl::GlslProg(loadResource(RES_PT_VERT_GLSL, "GLSL"), loadResource(RES_SEA_FRAG_GLSL, "GLSL"));
-	mShaderProg[1] = gl::GlslProg(loadResource(RES_PT_VERT_GLSL, "GLSL"), loadResource(RES_MOUNTAIN_FRAG_GLSL, "GLSL"));
-	mShaderProg[2] = gl::GlslProg(loadResource(RES_PT_VERT_GLSL, "GLSL"), loadResource(RES_FRAG_GLSL, "GLSL"));
 
+	//exception here might be becuase the frag shaders are for opengl 2.1
+	mShaderProg[0] = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("passThruVert.glsl"))
+		.fragment(loadAsset("seaFrag.glsl")));
+	mShaderProg[1] = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("passThruVert.glsl"))
+		.fragment(loadAsset("mountainFrag.glsl")));
+	mShaderProg[2] = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("passThruVert.glsl"))
+		.fragment(loadAsset("frag.glsl")));
+	
 	bInitialized = false;
 
 
@@ -48,19 +60,13 @@ void SimlTexturingApp::resizeScreens(){
 
  
     
-    if(mVboMesh)mVboMesh->reset();
+    //if(mVboMesh)mVboMesh->reset();
     
     // setup the parameters of the Vbo
     int totalVertices = mVerticesX * mVerticesY;
-    int totalQuads = ( mVerticesX - 1 ) * ( mVerticesY - 1 );
     gl::VboMesh::Layout layout;
-    layout.setStaticIndices();
-    layout.setStaticPositions();
-    layout.setStaticTexCoords2d();
-    mVboMesh = gl::VboMesh::create( totalVertices, totalQuads * 4, layout, GL_QUADS );
-    
-    vector<uint32_t> indices;
-    vector<Vec2f> texCoords;
+  
+    vector<vec2> texCoords;
     
     vector<float> winXPoints(NUM_SCREENS * 2);
     vector<float> texXPoints(NUM_SCREENS * 2);
@@ -97,9 +103,9 @@ void SimlTexturingApp::resizeScreens(){
         
         //winX points are all evenly spaced ... each projector is the same width
         if(i%2 == 0){
-            winXPoints[i] = (i/2) * incr;
+            winXPoints[i] = (i/2) * incr * mcWindowWidth;
         }else{
-            winXPoints[i] = ((i+1)/2) * incr;
+            winXPoints[i] = ((i+1)/2) * incr * mcWindowWidth;
         }
     }
     
@@ -107,52 +113,37 @@ void SimlTexturingApp::resizeScreens(){
     for(int i = 0; i < NUM_SCREENS; i++)
     {
         for(int j = 0; j < 4; j++){
-            winYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : screenHeights[i]; // we shorten the screen heights for the larger screens
+            winYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : screenHeights[i] * mcWindowHeight; // we shorten the screen heights for the larger screens
             texYPoints[i * 4 + j] = (j%2 == 0)? 0.0 : 1.0;
         }
         
         
     }
     
-    vector<Vec3f> positions;
+    vector<vec3> positions;
     positions.resize(totalVertices);
     
     for( int x = 0; x < mVerticesX; ++x ) {
         for( int y = 0; y < mVerticesY; ++y ) {
-            // create a quad for each vertex, except for along the bottom and right edges
-            if( ( x + 1 < mVerticesX ) && ( y + 1 < mVerticesY ) ) {
-                
-                indices.push_back( (x+0) * mVerticesY + (y+0) );
-                indices.push_back( (x+1) * mVerticesY + (y+0) );
-                indices.push_back( (x+1) * mVerticesY + (y+1) );
-                indices.push_back( (x+0) * mVerticesY + (y+1) );
-            }
+       
             // the texture coordinates are mapped to [0,1.0)
-            texCoords.push_back(Vec2f(texXPoints[x], texYPoints[y]));
-            Vec3f p(  winXPoints[x],  winYPoints[y + x * 2], 0 );
+            texCoords.push_back(vec2(texXPoints[x], texYPoints[y]));
+            vec3 p(  winXPoints[x],  winYPoints[y + x * 2], 0 );
             positions[x * mVerticesY + y] = p;
         }
     }
     
 
-	//console() << "texture x: " << std::endl;
 
-	//for (int i = 0; i < texXPoints.size(); i++)
-	//{
-	//	console()  << texXPoints[i] * 8192 << ",";
-	//}
-
-	//console() << std::endl;
-
-
-	console() << "Hello!!" << std::endl;
 
    
 
-    mVboMesh->bufferIndices( indices );
-    mVboMesh->bufferTexCoords2d( 0, texCoords );
-    mVboMesh->bufferPositions(positions);
-    mVboMesh->unbindBuffers();
+	mVboMesh->bufferAttrib(geom::Attrib::POSITION, sizeof(vec3) * mVerticesX * mVerticesY,
+		&positions[0]);
+
+	mVboMesh->bufferAttrib(geom::Attrib::TEX_COORD_0, sizeof(vec2) * mVerticesX * mVerticesY,
+		&texCoords[0]);
+
     
 
     float fboProp = ((1 - 1/mProp) * 2)/tot + 1;
@@ -165,35 +156,25 @@ void SimlTexturingApp::resizeScreens(){
     //this will need to be reset too
     gl::Fbo::Format format;
     //format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
-    if(mFbo){
-        mFbo.unbindTexture();
-        mFbo.reset();
+   // if(mFbo)mFbo.reset();
 
-    }
     
-    mFbo = gl::Fbo( mFboWidth, mFboHeight, format );
+    mFbo = gl::Fbo::create( mFboWidth, mFboHeight, format );
     
     
 }
 
 void SimlTexturingApp::renderSceneToFbo()
 {
-    // this will restore the old framebuffer binding when we leave this function
-    // on non-OpenGL ES platforms, you can just call mFbo.unbindFramebuffer() at the end of the function
-    // but this will restore the "screen" FBO on OpenGL ES, and does the right thing on both platforms
-    gl::SaveFramebufferBinding bindingSaver;
+
     
-    // bind the framebuffer - now everything we draw will go there
-    mFbo.bindFramebuffer();
+
     
-    // setup the viewport to match the dimensions of the FBO
-    gl::setViewport( mFbo.getBounds() );
-    gl::setMatricesWindow( mFbo.getSize() );
-    
-    // set the modelview matrix to reflect our current rotation
+	
+
     
     // clear out the FBO with blue
-    gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
+
     
 
 	if (mRenderMode == 0)
@@ -201,7 +182,7 @@ void SimlTexturingApp::renderSceneToFbo()
 		renderTestImage();
 	}
 	else if(mRenderMode == 1){
-		renderShaderImage();
+		//renderShaderImage();
 	}
 
 	else if (mRenderMode == 2){
@@ -210,22 +191,30 @@ void SimlTexturingApp::renderSceneToFbo()
     
 
 	else if (mRenderMode == 3){
-		renderSpout();
+		//renderSpout();
 	}
 
    
-    mFbo.unbindFramebuffer();
   
 }
 
 void SimlTexturingApp::renderTestImage(){
+
+	// bind the framebuffer - now everything we draw will go there
+	gl::ScopedFramebuffer fbScp(mFbo);
+
+	// setup the viewport to match the dimensions of the FBO
+	gl::ScopedViewport scVp(mFbo->getSize());
+	gl::setMatricesWindow(mFbo->getSize());
+	gl::clear(Color(0.0f, 0.0f, 1.0f));
+	gl::GlslProgRef solidShader = gl::getStockShader(gl::ShaderDef().color());
 	Rand r;
 	float pos = 0;
 
 	for (int i = 0; i < NUM_SCREENS; i++){
 		gl::color(Color(r.nextFloat(), r.nextFloat(), r.nextFloat()));
-		Rectf rect(pos / 6 * mFbo.getWidth(), 0,
-			pos / 6 * mFbo.getWidth() + mNormalizedProps[i] / 6 * mFbo.getWidth(), mFbo.getHeight());
+		Rectf rect(pos / 6 * mFbo->getWidth(), 0,
+			pos / 6 * mFbo->getWidth() + mNormalizedProps[i] / 6 * mFbo->getWidth(), mFbo->getHeight());
 		gl::drawSolidRect(rect);
 		pos += mNormalizedProps[i];
 
@@ -233,32 +222,39 @@ void SimlTexturingApp::renderTestImage(){
 
 	gl::color(Color(1.0f, 1.0f, 1.0f));
 
-	float incr = mFbo.getHeight() / 2;
-	int numBs = ceil(mFbo.getWidth() / incr);
+	float incr = mFbo->getHeight() / 2;
+	int numBs = ceil(mFbo->getWidth() / incr);
 
 	for (int i = 0; i < numBs; i++){
-		gl::drawLine(Vec2f(i * incr, 0), Vec2f((i + 1) * incr, mFbo.getHeight() / 2));
-		gl::drawLine(Vec2f(i * incr, mFbo.getHeight() / 2), Vec2f((i + 1) * incr, mFbo.getHeight()));
-		gl::drawLine(Vec2f(i * incr, 0), Vec2f(i * incr, mFbo.getHeight()));
-		gl::drawSolidCircle(Vec2f(i * incr, mFbo.getHeight() / 2), 10);
+		gl::drawLine(vec2(i * incr, 0), vec2((i + 1) * incr, mFbo->getHeight() / 2));
+		gl::drawLine(vec2(i * incr, mFbo->getHeight() / 2), vec2((i + 1) * incr, mFbo->getHeight()));
+		gl::drawLine(vec2(i * incr, 0), vec2(i * incr, mFbo->getHeight()));
+		gl::drawSolidCircle(vec2(i * incr, mFbo->getHeight() / 2), 10);
 	}
 
-	gl::drawLine(Vec2f(0, mFbo.getHeight() / 2), Vec2f(mFbo.getWidth(), mFbo.getHeight() / 2));
+	gl::drawLine(vec2(0, mFbo->getHeight() / 2), vec2(mFbo->getWidth(), mFbo->getHeight() / 2));
 }
 
-void SimlTexturingApp::renderMovie(){
 
-	gl::clear(Color(1.0, 1.0, 1.0));
+void SimlTexturingApp::renderMovie(){
+ 	gl::ScopedFramebuffer fbScp(mFbo);
+
+	// setup the viewport to match the dimensions of the FBO
+	gl::ScopedViewport scVp(mFbo->getSize());
+	gl::setMatricesWindow(mFbo->getSize());
+	gl::clear(Color(0.0f, 0.0f, 1.0f));
+
 	//gl::enableAlphaBlending();
 
 	if (mMovie) {
-		Rectf centeredRect = Rectf(mMovie->getTexture().getBounds()).getCenteredFit(mFbo.getBounds(), true);
+		Rectf centeredRect = Rectf(mMovie->getTexture()->getBounds()).getCenteredFit(mFbo->getBounds(), true);
 		gl::draw(mMovie->getTexture(), centeredRect);
 	}
 	
 
 }
 
+/*
 void SimlTexturingApp::renderSpout(){
 
 	unsigned int width, height;
@@ -342,38 +338,41 @@ void SimlTexturingApp::renderSpout(){
 			} */
 
 			// Otherwise draw the texture and fill the screen
-			gl::draw(spoutTexture, getWindowBounds());
+		/*	gl::draw(spoutTexture, getWindowBounds());
 
 			// Show the user what it is receiving
 			gl::enableAlphaBlending();
 			sprintf_s(txt, "Receiving from [%s]", SenderName);
-			gl::drawString(txt, Vec2f(toPixels(20), toPixels(20)), Color(1, 1, 1), Font("Verdana", toPixels(24)));
+			gl::drawString(txt, vec2(toPixels(20), toPixels(20)), Color(1, 1, 1), Font("Verdana", toPixels(24)));
 			sprintf_s(txt, "fps : %2.2d", (int)getAverageFps());
-			gl::drawString(txt, Vec2f(getWindowWidth() - toPixels(100), toPixels(20)), Color(1, 1, 1), Font("Verdana", toPixels(24)));
-			gl::drawString("RH click to select a sender", Vec2f(toPixels(20), getWindowHeight() - toPixels(40)), Color(1, 1, 1), Font("Verdana", toPixels(24)));
+			gl::drawString(txt, vec2(getWindowWidth() - toPixels(100), toPixels(20)), Color(1, 1, 1), Font("Verdana", toPixels(24)));
+			gl::drawString("RH click to select a sender", vec2(toPixels(20), getWindowHeight() - toPixels(40)), Color(1, 1, 1), Font("Verdana", toPixels(24)));
 			gl::disableAlphaBlending();
 			return; // received OK 
 		}
 	}
 
 //	gl::enableAlphaBlending();
-//	gl::drawString("No sender detected", Vec2f(toPixels(20), toPixels(20)), Color(1, 1, 1), Font("Verdana", toPixels(24)));
+//	gl::drawString("No sender detected", vec2(toPixels(20), toPixels(20)), Color(1, 1, 1), Font("Verdana", toPixels(24)));
 //	gl::disableAlphaBlending();
 	// ----------------------------
 
 }
+*/
 
+/*
 void SimlTexturingApp::renderShaderImage(){
 
 	mShaderProg[mCurrentShader ].bind();
-	Vec2f res = Vec2f(mFboWidth, mFboHeight);
+	vec2 res = vec2(mFboWidth, mFboHeight);
 	mShaderProg[mCurrentShader].uniform("iResolution", res);
 	mShaderProg[mCurrentShader].uniform("iGlobalTime", (float)app::getElapsedSeconds());
-	mShaderProg[mCurrentShader].uniform("iMouse", Vec2f(0., 0));
+	mShaderProg[mCurrentShader].uniform("iMouse", vec2(0., 0));
 	gl::drawSolidRect(mFbo.getBounds());
 	mShaderProg[mCurrentShader].unbind();
 
 }
+*/
 
 void SimlTexturingApp::update()
 {
@@ -390,27 +389,15 @@ void SimlTexturingApp::update()
 
 void SimlTexturingApp::draw()
 {
-    
-    gl::setViewport( getWindowBounds() );
+	gl::clear(Color(0.0, 0.0, 0.0));
     gl::setMatricesWindow( getWindowSize() );
-	// this pair of lines is the standard way to clear the screen in OpenGL
-	gl::clear( Color( 0.15f, 0.15f, 0.15f ) );
-    
-    gl::color( Color( 1.0f, 1.0f, 1.0f ) );
-    
-    gl::pushMatrices();
-    glScalef(getWindowWidth(), getWindowHeight(), 1.0);
+	gl::color(1.0, 1.0, 1.0);
 
-    mFbo.getTexture().enableAndBind();
-    //gl::draw(  Rectf( 0, 0, 128 * 6, 72 ) );
-    //gl::draw(mFbo.getTexture());
-    gl::draw( mVboMesh );
-    mFbo.getTexture().unbind();
-    gl::popMatrices();
-
-
-    
-
+	gl::ScopedGlslProg shaderScp(gl::getStockShader(gl::ShaderDef().texture()));
+	mFbo->bindTexture();
+	gl::draw(mVboMesh);
+	mFbo->unbindTexture();
+   
 
 }
 
@@ -443,6 +430,7 @@ void SimlTexturingApp::keyDown(KeyEvent key){
 		fs::path moviePath = getOpenFilePath();
 		if (!moviePath.empty())
 			loadMovieFile(moviePath);
+			
 	}   
 
 	if (key.getCode() == KeyEvent::KEY_ESCAPE){
@@ -453,6 +441,7 @@ void SimlTexturingApp::keyDown(KeyEvent key){
     
     
 }
+
 
 void SimlTexturingApp::loadMovieFile(const fs::path &moviePath)
 {
@@ -466,7 +455,7 @@ void SimlTexturingApp::loadMovieFile(const fs::path &moviePath)
 	}
 	catch (...) {
 		console() << "Unable to load the movie." << std::endl;
-		mMovie->reset();
+		mMovie.reset();
 		
 	}
 
@@ -474,19 +463,19 @@ void SimlTexturingApp::loadMovieFile(const fs::path &moviePath)
 
 void SimlTexturingApp::shutdown()
 {
-	spoutreceiver.ReleaseReceiver();
+	//spoutreceiver.ReleaseReceiver();
 }
 
 void SimlTexturingApp::mouseDown(MouseEvent event)
 {
-	if (mRenderMode == 3) {
+	/*if (mRenderMode == 3) {
 		if (event.isRightDown()) { // Select a sender
 			// SpoutPanel.exe must be in the executable path
 			spoutreceiver.SelectSenderPanel(); // DirectX 11 by default
 		}
-	}
+	}*/
 }
 
 
 
-CINDER_APP_BASIC( SimlTexturingApp, RendererGl )
+CINDER_APP( SimlTexturingApp, RendererGl )

@@ -10,18 +10,22 @@
 #define simlTexturing_simlTexturing_h
 
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
+#include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
-#include "cinder/gl/Vbo.h"
-#include "cinder/gl/Fbo.h"
-#include "cinder/gl/Texture.h"
-#include "cinder/Rand.h"
+#include "cinder/GeomIO.h"
 #include "cinder/ImageIo.h"
-
+#include "cinder/CameraUi.h"
+#include "cinder/Rand.h"
+#include "cinder/qtime/QuickTimeGl.h"
+/*
 #include "cinder/gl/GlslProg.h"
-#include "cinder/qtime/QuickTime.h"
+
 #include "Spout.h"
 #include <algorithm>
+*/
+
+
 
 #include "../include/Resources.h"
 
@@ -32,7 +36,7 @@ using namespace ci::app;
 
 using std::vector;
 
-class SimlTexturingApp : public AppBasic {
+class SimlTexturingApp : public App {
     
 public:
     void setup();
@@ -42,20 +46,20 @@ public:
     void renderSceneToFbo();
 
 	void renderMovie();
-	void renderSpout();
+	//void renderSpout();
 	void loadMovieFile(const fs::path &moviePath);
 	void mouseDown(MouseEvent event);
 	void renderTestImage();
-	void renderShaderImage();
+	//void renderShaderImage();
     
     static const int NUM_SCREENS = 6;
     int mVerticesX, mVerticesY;
 	int mLastFrameCount;
     
-    gl::Fbo mFbo;
+    gl::FboRef mFbo;
     gl::VboMeshRef	mVboMesh;
 
-	vector<gl::GlslProg>	mShaderProg;
+	vector<gl::GlslProgRef>	mShaderProg;
 	qtime::MovieGlRef		mMovie;
 
 
@@ -70,15 +74,15 @@ public:
 	float mTargetTime;
     float mNormalizedProps[NUM_SCREENS];
     float mScreenWidths [NUM_SCREENS];
-    void prepareSettings(Settings * settings);
+
     
     void keyDown(KeyEvent key);
 
 	void shutdown();
 
 
-	SpoutReceiver spoutreceiver;				// Create a Spout receiver object
-	gl::Texture spoutTexture;					// Local Cinder texture used for sharing
+	//SpoutReceiver spoutreceiver;				// Create a Spout receiver object
+	//gl::Texture spoutTexture;					// Local Cinder texture used for sharing
 
 	bool bInitialized;							// true if a sender initializes OK
 	bool bDoneOnce;								// only try to initialize once

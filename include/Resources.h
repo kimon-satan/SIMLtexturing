@@ -1,6 +1,2 @@
 #pragma once
-
-#define RES_PT_VERT_GLSL	128
-#define RES_SEA_FRAG_GLSL	129
-#define RES_MOUNTAIN_FRAG_GLSL	130
-#define RES_FRAG_GLSL	131
+#include "cinder/CinderResources.h"
