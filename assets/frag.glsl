@@ -1,4 +1,4 @@
-#version 120
+#version 410
 
 
 //---------------------------------------------------------
@@ -10,6 +10,8 @@
 // tags:     menger, sponge, raymarcher, cross box, intersection
 //---------------------------------------------------------
 
+
+out vec4 ciColor;
 
 uniform float iGlobalTime;
 uniform vec2 iMouse;
@@ -142,6 +144,6 @@ void main()
 
   vec3 col = render( ro, rd );
     
-  gl_FragColor = vec4(col,1.0);
+  ciColor = vec4(col,1.0);
 
 }

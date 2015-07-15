@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/kimonsatan/code/cinder_0.8.6_mac/myApps/VBOSample/xcode/simlTexturing.xcodeproj">
+      location = "self:/Users/kimonsatan/code/Cinder/myapps/SIMLtexturing/xcode/simlTexturing.xcodeproj">
    </FileRef>
 </Workspace>

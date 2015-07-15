@@ -50,7 +50,7 @@ public:
 	void loadMovieFile(const fs::path &moviePath);
 	void mouseDown(MouseEvent event);
 	void renderTestImage();
-	//void renderShaderImage();
+	void renderShaderImage();
     
     static const int NUM_SCREENS = 6;
     int mVerticesX, mVerticesY;
@@ -63,8 +63,8 @@ public:
 	qtime::MovieGlRef		mMovie;
 
 
-    static const int mcWindowWidth = 128 * 6 * 10;
-    static const int mcWindowHeight =  720;
+    static const int mcWindowWidth = 128 * 6 * 2;
+    static const int mcWindowHeight =  72 * 2;
     int	mFboWidth, mFboHeight;
 	int mCurrentShader, mRenderMode;
     

@@ -8,9 +8,9 @@ void SimlTexturingApp::setup()
 
 	setWindowSize(mcWindowWidth, mcWindowHeight);
 	setFrameRate(60.0f);
-	getWindow()->setBorderless();
+	//getWindow()->setBorderless();
 
-	setWindowPos(1280, 0);
+	setWindowPos(0, 0);
 
 	g_Width = mcWindowHeight; // set global width and height to something
 	g_Height = mcWindowHeight;
@@ -149,8 +149,8 @@ void SimlTexturingApp::resizeScreens(){
     float fboProp = ((1 - 1/mProp) * 2)/tot + 1;
 
     
-    mFboWidth = 128 * 6 * 10 *  fboProp;
-    mFboHeight = 720;
+    mFboWidth = 128 * 6 * 2 *  fboProp;
+    mFboHeight = 72 * 2;
     
 
     //this will need to be reset too
@@ -182,7 +182,7 @@ void SimlTexturingApp::renderSceneToFbo()
 		renderTestImage();
 	}
 	else if(mRenderMode == 1){
-		//renderShaderImage();
+		renderShaderImage();
 	}
 
 	else if (mRenderMode == 2){
@@ -360,28 +360,36 @@ void SimlTexturingApp::renderSpout(){
 }
 */
 
-/*
-void SimlTexturingApp::renderShaderImage(){
 
-	mShaderProg[mCurrentShader ].bind();
+void SimlTexturingApp::renderShaderImage(){
+    
+    gl::ScopedFramebuffer fbScp(mFbo);
+    
+    // setup the viewport to match the dimensions of the FBO
+    gl::ScopedViewport scVp(mFbo->getSize());
+    gl::setMatricesWindow(mFbo->getSize());
+    gl::clear(Color(0.0f, 0.0f, 1.0f));
+
+    //gl::ScopedGlslProg shaderScp(mShaderProg[mCurrentShader ]);
 	vec2 res = vec2(mFboWidth, mFboHeight);
-	mShaderProg[mCurrentShader].uniform("iResolution", res);
-	mShaderProg[mCurrentShader].uniform("iGlobalTime", (float)app::getElapsedSeconds());
-	mShaderProg[mCurrentShader].uniform("iMouse", vec2(0., 0));
-	gl::drawSolidRect(mFbo.getBounds());
-	mShaderProg[mCurrentShader].unbind();
+	mShaderProg[mCurrentShader]->uniform("iResolution", res);
+	mShaderProg[mCurrentShader]->uniform("iGlobalTime", (float)app::getElapsedSeconds());
+	mShaderProg[mCurrentShader]->uniform("iMouse", vec2(0., 0));
+    
+    gl::BatchRef br = gl::Batch::create( geom::Rect(mFbo->getBounds()), mShaderProg[mCurrentShader] );
+    
+    br->draw();
+
 
 }
-*/
+
 
 void SimlTexturingApp::update()
 {
-	if (app::getElapsedSeconds() >= mTargetTime){
-		int fps = app::getElapsedFrames() - mLastFrameCount;
-		//console() <<  fps << std::endl;
-		mLastFrameCount = app::getElapsedFrames();
-		mTargetTime += 1;
-	}
+    
+    std::string s = std::to_string(getAverageFps());
+    getWindow()->setTitle(s);
+
 	renderSceneToFbo();
 
 }

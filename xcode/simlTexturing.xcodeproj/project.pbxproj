@@ -13,12 +13,37 @@
 		001F55880FD48DE90021731E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F55870FD48DE90021731E /* Accelerate.framework */; };
 		0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0091D8F80E81B9330029341E /* OpenGL.framework */; };
 		0097E3E50F3E9819005A4392 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0097E3E40F3E9819005A4392 /* QuickTime.framework */; };
-		00BAE65A0E7ED9C10018A608 /* simlTexturing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BAE6590E7ED9C10018A608 /* simlTexturing.cpp */; };
-		00CD22B91173CA920051407E /* cinder_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00CD22B81173CA920051407E /* cinder_logo.png */; };
+		00B9955A1B128DF400A5C623 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995581B128DF400A5C623 /* IOKit.framework */; };
+		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
+		110DC3D21ABA58EE0028C512 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 110DC3D11ABA58EE0028C512 /* AVFoundation.framework */; };
+		110DC3D41ABA58FB0028C512 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 110DC3D31ABA58FB0028C512 /* CoreMedia.framework */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CDFB0E86099300238D2B /* Carbon.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		F178D6E21B56509B00F9FDE6 /* simlTexturing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F178D6E01B56509B00F9FDE6 /* simlTexturing.cpp */; };
+		F178D6E81B56542600F9FDE6 /* frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = F178D6E41B56542600F9FDE6 /* frag.glsl */; };
+		F178D6E91B56542600F9FDE6 /* mountainFrag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = F178D6E51B56542600F9FDE6 /* mountainFrag.glsl */; };
+		F178D6EA1B56542600F9FDE6 /* passThruVert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = F178D6E61B56542600F9FDE6 /* passThruVert.glsl */; };
+		F178D6EB1B56542600F9FDE6 /* seaFrag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = F178D6E71B56542600F9FDE6 /* seaFrag.glsl */; };
+		F19A70681B551E36007E0C41 /* cinder_app_icon.ico in Resources */ = {isa = PBXBuildFile; fileRef = F19A70541B551E36007E0C41 /* cinder_app_icon.ico */; };
+		F19A70691B551E36007E0C41 /* cinder_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A70551B551E36007E0C41 /* cinder_logo.png */; };
+		F19A706A1B551E36007E0C41 /* cinder_logo_alpha.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A70561B551E36007E0C41 /* cinder_logo_alpha.png */; };
+		F19A706B1B551E36007E0C41 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = F19A70571B551E36007E0C41 /* CinderApp.icns */; };
+		F19A706C1B551E36007E0C41 /* CinderApp_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A70581B551E36007E0C41 /* CinderApp_ios.png */; };
+		F19A706D1B551E36007E0C41 /* earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F19A70591B551E36007E0C41 /* earth.jpg */; };
+		F19A706E1B551E36007E0C41 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F19A705A1B551E36007E0C41 /* LICENSE */; };
+		F19A706F1B551E36007E0C41 /* 8lbs.obj in Resources */ = {isa = PBXBuildFile; fileRef = F19A705C1B551E36007E0C41 /* 8lbs.obj */; };
+		F19A70701B551E36007E0C41 /* photo_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F19A705D1B551E36007E0C41 /* photo_1.jpg */; };
+		F19A70711B551E36007E0C41 /* photo_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F19A705E1B551E36007E0C41 /* photo_2.jpg */; };
+		F19A70721B551E36007E0C41 /* photo_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F19A705F1B551E36007E0C41 /* photo_3.jpg */; };
+		F19A70731B551E36007E0C41 /* photo_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F19A70601B551E36007E0C41 /* photo_4.jpg */; };
+		F19A70741B551E36007E0C41 /* photo_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F19A70611B551E36007E0C41 /* photo_5.jpg */; };
+		F19A70751B551E36007E0C41 /* photo_6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F19A70621B551E36007E0C41 /* photo_6.jpg */; };
+		F19A70761B551E36007E0C41 /* photo_7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F19A70631B551E36007E0C41 /* photo_7.jpg */; };
+		F19A70771B551E36007E0C41 /* photo_8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F19A70641B551E36007E0C41 /* photo_8.jpg */; };
+		F19A70781B551E36007E0C41 /* rg_grad.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A70651B551E36007E0C41 /* rg_grad.png */; };
+		F19A70791B551E36007E0C41 /* DrainMagic.ogg in Resources */ = {isa = PBXBuildFile; fileRef = F19A70671B551E36007E0C41 /* DrainMagic.ogg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,20 +53,45 @@
 		001F55870FD48DE90021731E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		0091D8F80E81B9330029341E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		0097E3E40F3E9819005A4392 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		00BAE6590E7ED9C10018A608 /* simlTexturing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = simlTexturing.cpp; path = ../src/simlTexturing.cpp; sourceTree = SOURCE_ROOT; };
+		00B995581B128DF400A5C623 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		00B995591B128DF400A5C623 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		00CD22B71173CA850051407E /* Resources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = SOURCE_ROOT; };
-		00CD22B81173CA920051407E /* cinder_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cinder_logo.png; path = ../../data/cinder_logo.png; sourceTree = SOURCE_ROOT; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		110DC3D11ABA58EE0028C512 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		110DC3D31ABA58FB0028C512 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		110DC3D51ABA5F610028C512 /* prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = prefix.pch; sourceTree = "<group>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		32CA4F630368D1EE00C91783 /* simlTexturing_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simlTexturing_Prefix.pch; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		53E3CDFB0E86099300238D2B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* simlTexturing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = simlTexturing.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1D25A591B4E7850000F79F8 /* simlTexturing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = simlTexturing.h; path = ../src/simlTexturing.h; sourceTree = "<group>"; };
+		F178D6E01B56509B00F9FDE6 /* simlTexturing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = simlTexturing.cpp; path = ../src/simlTexturing.cpp; sourceTree = "<group>"; };
+		F178D6E11B56509B00F9FDE6 /* simlTexturing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = simlTexturing.h; path = ../src/simlTexturing.h; sourceTree = "<group>"; };
+		F178D6E41B56542600F9FDE6 /* frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = frag.glsl; path = ../assets/frag.glsl; sourceTree = "<group>"; };
+		F178D6E51B56542600F9FDE6 /* mountainFrag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mountainFrag.glsl; path = ../assets/mountainFrag.glsl; sourceTree = "<group>"; };
+		F178D6E61B56542600F9FDE6 /* passThruVert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = passThruVert.glsl; path = ../assets/passThruVert.glsl; sourceTree = "<group>"; };
+		F178D6E71B56542600F9FDE6 /* seaFrag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = seaFrag.glsl; path = ../assets/seaFrag.glsl; sourceTree = "<group>"; };
+		F19A70541B551E36007E0C41 /* cinder_app_icon.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = cinder_app_icon.ico; sourceTree = "<group>"; };
+		F19A70551B551E36007E0C41 /* cinder_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cinder_logo.png; sourceTree = "<group>"; };
+		F19A70561B551E36007E0C41 /* cinder_logo_alpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cinder_logo_alpha.png; sourceTree = "<group>"; };
+		F19A70571B551E36007E0C41 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CinderApp.icns; sourceTree = "<group>"; };
+		F19A70581B551E36007E0C41 /* CinderApp_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CinderApp_ios.png; sourceTree = "<group>"; };
+		F19A70591B551E36007E0C41 /* earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = earth.jpg; sourceTree = "<group>"; };
+		F19A705A1B551E36007E0C41 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		F19A705C1B551E36007E0C41 /* 8lbs.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 8lbs.obj; sourceTree = "<group>"; };
+		F19A705D1B551E36007E0C41 /* photo_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_1.jpg; sourceTree = "<group>"; };
+		F19A705E1B551E36007E0C41 /* photo_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_2.jpg; sourceTree = "<group>"; };
+		F19A705F1B551E36007E0C41 /* photo_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_3.jpg; sourceTree = "<group>"; };
+		F19A70601B551E36007E0C41 /* photo_4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_4.jpg; sourceTree = "<group>"; };
+		F19A70611B551E36007E0C41 /* photo_5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_5.jpg; sourceTree = "<group>"; };
+		F19A70621B551E36007E0C41 /* photo_6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_6.jpg; sourceTree = "<group>"; };
+		F19A70631B551E36007E0C41 /* photo_7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_7.jpg; sourceTree = "<group>"; };
+		F19A70641B551E36007E0C41 /* photo_8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo_8.jpg; sourceTree = "<group>"; };
+		F19A70651B551E36007E0C41 /* rg_grad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rg_grad.png; sourceTree = "<group>"; };
+		F19A70671B551E36007E0C41 /* DrainMagic.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = DrainMagic.ogg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +99,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				110DC3D41ABA58FB0028C512 /* CoreMedia.framework in Frameworks */,
+				00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */,
+				00B9955A1B128DF400A5C623 /* IOKit.framework in Frameworks */,
+				110DC3D21ABA58EE0028C512 /* AVFoundation.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */,
 				53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */,
@@ -76,8 +130,8 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				00BAE6590E7ED9C10018A608 /* simlTexturing.cpp */,
-				F1D25A591B4E7850000F79F8 /* simlTexturing.h */,
+				F178D6E01B56509B00F9FDE6 /* simlTexturing.cpp */,
+				F178D6E11B56509B00F9FDE6 /* simlTexturing.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -117,9 +171,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* VBOSample */ = {
+		29B97314FDCFA39411CA2CEA /* VboMesh */ = {
 			isa = PBXGroup;
 			children = (
+				F178D6E31B56540900F9FDE6 /* Assets */,
 				00CD22B41173CA790051407E /* Headers */,
 				080E96DDFE201D6D7F000001 /* Source */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -127,13 +182,13 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
-			name = VBOSample;
+			name = VboMesh;
 			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				32CA4F630368D1EE00C91783 /* simlTexturing_Prefix.pch */,
+				110DC3D51ABA5F610028C512 /* prefix.pch */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -141,7 +196,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				00CD22B81173CA920051407E /* cinder_logo.png */,
+				F19A70531B551E36007E0C41 /* data */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
 			name = Resources;
@@ -150,10 +205,67 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				110DC3D31ABA58FB0028C512 /* CoreMedia.framework */,
+				00B995581B128DF400A5C623 /* IOKit.framework */,
+				00B995591B128DF400A5C623 /* IOSurface.framework */,
+				110DC3D11ABA58EE0028C512 /* AVFoundation.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F178D6E31B56540900F9FDE6 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				F178D6E61B56542600F9FDE6 /* passThruVert.glsl */,
+				F178D6E41B56542600F9FDE6 /* frag.glsl */,
+				F178D6E51B56542600F9FDE6 /* mountainFrag.glsl */,
+				F178D6E71B56542600F9FDE6 /* seaFrag.glsl */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		F19A70531B551E36007E0C41 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				F19A70541B551E36007E0C41 /* cinder_app_icon.ico */,
+				F19A70551B551E36007E0C41 /* cinder_logo.png */,
+				F19A70561B551E36007E0C41 /* cinder_logo_alpha.png */,
+				F19A70571B551E36007E0C41 /* CinderApp.icns */,
+				F19A70581B551E36007E0C41 /* CinderApp_ios.png */,
+				F19A70591B551E36007E0C41 /* earth.jpg */,
+				F19A705A1B551E36007E0C41 /* LICENSE */,
+				F19A705B1B551E36007E0C41 /* models */,
+				F19A705D1B551E36007E0C41 /* photo_1.jpg */,
+				F19A705E1B551E36007E0C41 /* photo_2.jpg */,
+				F19A705F1B551E36007E0C41 /* photo_3.jpg */,
+				F19A70601B551E36007E0C41 /* photo_4.jpg */,
+				F19A70611B551E36007E0C41 /* photo_5.jpg */,
+				F19A70621B551E36007E0C41 /* photo_6.jpg */,
+				F19A70631B551E36007E0C41 /* photo_7.jpg */,
+				F19A70641B551E36007E0C41 /* photo_8.jpg */,
+				F19A70651B551E36007E0C41 /* rg_grad.png */,
+				F19A70661B551E36007E0C41 /* sound */,
+			);
+			name = data;
+			path = ../../data;
+			sourceTree = "<group>";
+		};
+		F19A705B1B551E36007E0C41 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				F19A705C1B551E36007E0C41 /* 8lbs.obj */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		F19A70661B551E36007E0C41 /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				F19A70671B551E36007E0C41 /* DrainMagic.ogg */,
+			);
+			path = sound;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,7 +285,7 @@
 			);
 			name = simlTexturing;
 			productInstallPath = "$(HOME)/Applications";
-			productName = VBOSample;
+			productName = VboMesh;
 			productReference = 8D1107320486CEB800E47090 /* simlTexturing.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -192,7 +304,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* VBOSample */;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* VboMesh */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -206,7 +318,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00CD22B91173CA920051407E /* cinder_logo.png in Resources */,
+				F19A70681B551E36007E0C41 /* cinder_app_icon.ico in Resources */,
+				F19A70691B551E36007E0C41 /* cinder_logo.png in Resources */,
+				F19A70721B551E36007E0C41 /* photo_3.jpg in Resources */,
+				F178D6E81B56542600F9FDE6 /* frag.glsl in Resources */,
+				F19A70761B551E36007E0C41 /* photo_7.jpg in Resources */,
+				F19A70731B551E36007E0C41 /* photo_4.jpg in Resources */,
+				F178D6EA1B56542600F9FDE6 /* passThruVert.glsl in Resources */,
+				F19A706F1B551E36007E0C41 /* 8lbs.obj in Resources */,
+				F19A70751B551E36007E0C41 /* photo_6.jpg in Resources */,
+				F19A70711B551E36007E0C41 /* photo_2.jpg in Resources */,
+				F19A70741B551E36007E0C41 /* photo_5.jpg in Resources */,
+				F19A706D1B551E36007E0C41 /* earth.jpg in Resources */,
+				F19A706E1B551E36007E0C41 /* LICENSE in Resources */,
+				F178D6E91B56542600F9FDE6 /* mountainFrag.glsl in Resources */,
+				F19A70771B551E36007E0C41 /* photo_8.jpg in Resources */,
+				F19A70791B551E36007E0C41 /* DrainMagic.ogg in Resources */,
+				F19A706A1B551E36007E0C41 /* cinder_logo_alpha.png in Resources */,
+				F19A70701B551E36007E0C41 /* photo_1.jpg in Resources */,
+				F19A70781B551E36007E0C41 /* rg_grad.png in Resources */,
+				F178D6EB1B56542600F9FDE6 /* seaFrag.glsl in Resources */,
+				F19A706B1B551E36007E0C41 /* CinderApp.icns in Resources */,
+				F19A706C1B551E36007E0C41 /* CinderApp_ios.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,7 +350,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00BAE65A0E7ED9C10018A608 /* simlTexturing.cpp in Sources */,
+				F178D6E21B56509B00F9FDE6 /* simlTexturing.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,19 +362,18 @@
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = simlTexturing_Prefix.pch;
+				GCC_PREFIX_HEADER = prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder_d.a";
 				PRODUCT_NAME = simlTexturing;
 				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
@@ -253,10 +385,9 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_FAST_MATH = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = simlTexturing_Prefix.pch;
+				GCC_PREFIX_HEADER = prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -270,13 +401,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
+				ARCHS = x86_64;
 				CINDER_PATH = ../../..;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(CINDER_PATH)/boost";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				HEADER_SEARCH_PATHS = (
+					"$(CINDER_PATH)/include",
+					"$(CINDER_PATH)/boost",
+					"$(CINDER_PATH)/blocks/QuickTime/include",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "$(CINDER_PATH)/include ../include";
 			};
@@ -286,13 +421,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
+				ARCHS = x86_64;
 				CINDER_PATH = ../../..;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(CINDER_PATH)/boost";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				HEADER_SEARCH_PATHS = (
+					"$(CINDER_PATH)/include",
+					"$(CINDER_PATH)/boost",
+					"$(CINDER_PATH)/blocks/QuickTime/include",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "$(CINDER_PATH)/include ../include";
 			};

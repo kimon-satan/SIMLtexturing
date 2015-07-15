@@ -1,4 +1,4 @@
-#version 120
+#version 410
 
 
 
@@ -8,11 +8,13 @@
 //By Iñigo Quilez Shadertoy
 //Copy Michael Mobius
 
+out vec4 ciColor;
+
 uniform float iGlobalTime;
 uniform vec2 iResolution;
 uniform vec2 iMouse;
 
-const float dMax = 10.0;
+const float dMax = 40.0;
 
 float snoise(vec2 p){
 	vec2 f=fract(p);
@@ -199,5 +201,5 @@ void main() {
 	// render
 	vec3 color = render(cPos, rd);
 	
-	gl_FragColor = vec4( color, 1.0 );
+	ciColor = vec4( color, 1.0 );
 }

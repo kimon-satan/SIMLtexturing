@@ -1,4 +1,4 @@
-#version 120
+#version 410
 
 
 
@@ -6,6 +6,8 @@
 
 // "Seascape" by Alexander Alekseev aka TDM - 2014
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+
+out vec4 ciColor;
 
 uniform float iGlobalTime;
 uniform vec2 iResolution;
@@ -192,7 +194,7 @@ void mainImage( ) {
     	pow(smoothstep(0.0,-0.05,dir.y),0.3));
         
     // post
-	gl_FragColor = vec4(pow(color,vec3(0.75)), 1.0);
+	ciColor = vec4(pow(color,vec3(0.75)), 1.0);
 }
 
 void main(){
